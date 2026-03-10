@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marlin | 成长记录博客</title>
+    <style>
+        /* 全局样式重置与基础配置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #0c0e14;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.7;
+            padding-top: 70px;
+        }
+
+        /* 固定导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(12, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e293b;
+            z-index: 999;
+            padding: 0.8rem 1rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-item {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #67e8f9;
+            background-color: rgba(103, 232, 249, 0.1);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* 首页Hero头部 */
+        .hero {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1.2rem;
+            border: 2px solid #67e8f9;
+            background-color: #121826;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+        }
+
+        .hero-tagline {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* 卡片通用样式：完全保留原风格 */
+        .card {
+            background-color: #121826;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(103, 232, 249, 0.1);
+        }
+
+        .card-title {
+            color: #67e8f9;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .card-subtitle {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .card-subtitle:first-of-type {
+            margin-top: 0;
+        }
+
+        .card p {
+            margin-bottom: 0.8rem;
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .quote {
+            border-left: 3px solid #67e8f9;
+            padding-left: 1.2rem;
+            margin: 1.2rem 0;
+            color: #94a3b8;
+            font-style: normal;
+        }
+
+        /* 列表样式 */
+        .content-list {
+            list-style: none;
+            margin: 1rem 0;
+            color: #cbd5e1;
+        }
+
+        .content-list li {
+            padding-left: 1rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-list li::before {
+            content: "•";
+            color: #67e8f9;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* 按钮样式：保留原设计 */
+        .btn-group {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: #67e8f9;
+            color: #0c0e14;
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #22d3ee;
+            transform: translateY(-1px);
+        }
+
+        /* 社交链接 */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .social-item {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid #1e293b;
+        }
+
+        .social-item:hover {
+            color: #67e8f9;
+            border-color: #67e8f9;
+            transform: translateY(-1px);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+            }
+            .hero-name {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            .card-title {
+                font-size: 1.4rem;
+            }
+            .nav-container {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-item">首页</a>
+            <a href="#about" class="nav-item">关于我</a>
+            <a href="#focus" class="nav-item">我的关注</a>
+            <a href="#growth" class="nav-item">成长系统</a>
+            <a href="#study" class="nav-item">学习记录</a>
+            <a href="#observation" class="nav-item">观察世界</a>
+            <a href="#ai" class="nav-item">AI与未来</a>
+            <a href="#goal" class="nav-item">长期目标</a>
+            <a href="#resource" class="nav-item">学习资源</a>
+            <a href="#log" class="nav-item">日志</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 首页 / Home -->
+        <section id="home" class="hero">
+            <div class="avatar">
+                <img src="https://picsum.photos/200/200" alt="Marlin的头像">
+            </div>
+            <h1 class="hero-name">Marlin</h1>
+            <p class="hero-tagline">大一数媒技术专业 | 成长记录者 | AI与创作实践者</p>
+            
+            <div class="card">
+                <div class="quote">
+                    <p>这里记录一个普通大学生的成长、学习、思考，以及与世界的对话。</p>
+                </div>
+                <p>这里没有成功学。</p>
+                <p>也没有人生导师。</p>
+                <p>这里只有一个普通大学生的成长记录。</p>
+                <p>我会记录：学习、思考、观察、生活。</p>
+                <p>有时候是一点顿悟。有时候是一点困惑。有时候只是一个普通下午的感受。</p>
+                <p>如果这些记录在某个时刻与你产生共鸣，那就很好。</p>
+                <div class="quote" style="margin-top: 1.5rem;">
+                    <p>我不知道这些记录会不会有意义。<br>但我知道，真实记录一个人的成长，本身就是一件很有价值的事情。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 / About -->
+        <section id="about">
+            <div class="card">
+                <h2 class="card-title">About Me / 关于我</h2>
+                <p>我是Marlin，一名大一数媒技术专业的女大学生。我对生活的细节有极强的捕捉力，习惯高频反思与深度反刍，认知敏锐，对自我成长始终保持觉察。</p>
+                <p>我相信表达是一种力量，而技术是一种工具。在数字时代，我希望通过AI与创作，建立属于自己的认知系统与表达空间。</p>
+
+                <h3 class="card-subtitle">我是谁</h3>
+                <p>一名普通大学生。</p>
+                <p>没有耀眼的成绩，也没有特别厉害的能力。</p>
+                <p>但我有一个习惯：<strong>长期记录自己的成长。</strong></p>
+                <p>我喜欢观察：自己、别人、世界。</p>
+                <p>很多人每天都在经历很多事情，但很少停下来思考。而我习惯把这些东西写下来。慢慢地，这些记录就变成了一个属于自己的数据库。</p>
+
+                <h3 class="card-subtitle">我的性格</h3>
+                <p>如果让我描述自己，大概是这样的人：</p>
+
+                <h4 style="color: #67e8f9; margin: 1rem 0 0.5rem;">观察型人格</h4>
+                <p>我喜欢观察生活里的细节。</p>
+                <p>比如在教室里：有人在解题，有人在聊天，有人在刷手机，有人在发呆。如果你认真看这些画面，会突然有一种感觉：每个人都在自己的世界里生活。这种感觉很奇妙。</p>
+
+                <h4 style="color: #67e8f9; margin: 1rem 0 0.5rem;">高度自省</h4>
+                <p>我经常会问自己：</p>
+                <p>为什么会拖延？为什么会逃避？为什么会突然失去动力？</p>
+                <p>慢慢地我发现：很多问题不是能力问题，而是心理问题。当你意识到这一点的时候，很多事情就开始变得清晰。</p>
+
+                <h4 style="color: #67e8f9; margin: 1rem 0 0.5rem;">强大的理解能力</h4>
+                <p>有时候我会遇到一些人。在内心里，我可能会想：“你是不是有点问题。”但我依然会尝试理解对方。</p>
+                <p>因为每个人的成长环境都不一样。理解别人，本身就是一种成长。</p>
+            </div>
+        </section>
+
+        <!-- 我的关注 / My Focus -->
+        <section id="focus">
+            <div class="card">
+                <h2 class="card-title">My Focus / 我的关注</h2>
+                <ul class="content-list">
+                    <li>AI & Vibe Coding</li>
+                    <li>个人成长与认知升级</li>
+                    <li>经济能力与技能提升</li>
+                    <li>注意力管理</li>
+                    <li>英语口语表达</li>
+                </ul>
+                <p>我追求的不只是技能堆积，而是能力结构的构建。我希望在技术与思考之间，找到属于自己的节奏。</p>
+            </div>
+        </section>
+
+        <!-- 成长系统 / Growth System -->
+        <section id="growth">
+            <div class="card">
+                <h2 class="card-title">Growth System / 成长系统</h2>
+                <p>这一部分是我博客最核心的内容，因为我始终相信：一个人最有价值的分享，是他真实的成长过程。</p>
+
+                <h3 class="card-subtitle">记录系统</h3>
+                <p>我慢慢发现一件事：成长最快的人，往往都有记录习惯。</p>
+                <p>所以我开始记录：学习、思考、聊天、观察。</p>
+                <p>这些东西慢慢积累，就变成一个非常有意思的东西：<strong>个人数据库。</strong></p>
+                <p>有一天回头看，你会发现：原来自己已经走了这么远。</p>
+
+                <h3 class="card-subtitle">学习系统</h3>
+                <p>我现在主要学习的内容：编程、AI工具。</p>
+                <p>我的学习方式并不完美。我也会逃避。</p>
+                <p>比如：遇到难题的时候，我会站起来。去厕所、去扔垃圾、去倒水。</p>
+                <p>但后来我发现一个关键：<strong>我会回来。</strong></p>
+                <p>很多人离开之后就不会再回来。而我会。这一点很重要。</p>
+
+                <h3 class="card-subtitle">行动力系统</h3>
+                <p>我发现自己有一个很奇妙的特点。当我看到别人努力时，我也会被带动。</p>
+                <p>比如：看到别人学习。我就会觉得：那我也学一会吧。</p>
+                <p>后来我意识到：很多人以为行动力一定来自自律。其实不是。</p>
+                <p>很多时候行动力来自：<strong>环境。</strong></p>
+                <p>如果你在一个大家都在努力的环境里，你也更容易行动。</p>
+            </div>
+        </section>
+
+        <!-- 学习记录 / Study Log -->
+        <section id="study">
+            <div class="card">
+                <h2 class="card-title">Study Log / 学习记录</h2>
+                <p>这里不写完美的总结，只记录我最真实的学习状态。</p>
+
+                <h3 class="card-subtitle">一次普通的学习</h3>
+                <p>有一天中午，我去图书馆学习。那天要攻克一个很难的知识点。</p>
+                <p>我开始做题。遇到难题的时候，我第一反应不是继续想，而是：站起来、去厕所、去扔垃圾、做一点别的事情。</p>
+                <p>但有一件事很重要。<strong>我都会回来。</strong></p>
+                <p>我一次一次回来。继续看题、继续想。</p>
+                <p>后来我突然发现：其实题目没有那么难。</p>
+                <p>那天我有一种很奇怪的感觉：我今天很厉害。不是因为我做对了多少题，而是因为：<strong>我没有放弃。</strong></p>
+            </div>
+        </section>
+
+        <!-- 观察世界 / Observations -->
+        <section id="observation">
+            <div class="card">
+                <h2 class="card-title">Observations / 观察世界</h2>
+                
+                <h3 class="card-subtitle">教室观察</h3>
+                <p>每一层教学楼都有教师办公室。你会看到很多同学从里面走出来。</p>
+                <p>有的是去问问题。有的是交作业。有的是被老师叫进去。</p>
+                <p>每个人出来的表情都不一样。有的人轻松。有的人紧张。有的人皱着眉头。</p>
+                <p>有时候坐在教室里，看着这些画面，会突然有一种感觉：原来大家都在努力生活。</p>
+                <p>这种感觉会让人产生一种奇妙的陪伴感。</p>
+            </div>
+        </section>
+
+        <!-- AI与未来 / AI & Future -->
+        <section id="ai">
+            <div class="card">
+                <h2 class="card-title">AI & Future / AI与未来</h2>
+                <p>AI 是我最近很感兴趣的东西。</p>
+                <p>很多人觉得 AI 的门槛很高。但我觉得最低门槛其实是：<strong>对话。</strong></p>
+                <p>只要你愿意把自己的经历讲出来，AI 就可以帮你整理和分析。</p>
+                <p>慢慢地你会发现：AI 不只是工具。它更像是一面镜子。</p>
+                <p>你在讲自己的故事时，也在重新认识自己。</p>
+            </div>
+        </section>
+
+        <!-- 长期目标 / Long Term -->
+        <section id="goal">
+            <div class="card">
+                <h2 class="card-title">Long Term / 长期目标</h2>
+                <p>未来我想做几件事。</p>
+
+                <h3 class="card-subtitle">学习技术</h3>
+                <p>学习：编程、AI工具。</p>
+                <p>希望未来可以做一些自己的软件，用技术实现自己的想法。</p>
+
+                <h3 class="card-subtitle">建立个人数据库</h3>
+                <p>持续记录：生活、学习、思考。</p>
+                <p>慢慢建立一个完整的人生记录，回头看时，能清晰看到自己成长的轨迹。</p>
+
+                <h3 class="card-subtitle">分享成长</h3>
+                <p>如果这些记录有一天能够帮助到别人，那会是一件很有意义的事情。</p>
+            </div>
+        </section>
+
+        <!-- 学习资源 / Learning Resources -->
+        <section id="resource">
+            <div class="card">
+                <h2 class="card-title">Learning Resources / 学习资源</h2>
+                <p>我整理的一些学习资源与启发内容:</p>
+                <div class="btn-group">
+                    <a href="https://www.bbc.com/" class="btn" target="_blank">Visit BBC</a>
+                    <!-- 新增资源直接复制上面的a标签，修改链接和文字即可 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 日志 / Daily Log -->
+        <section id="log">
+            <div class="card">
+                <h2 class="card-title">Daily Log / 日志</h2>
+                <p>这里会记录每天的细碎日常，不需要很长，只要真实。</p>
+                
+                <div style="margin-top: 1.5rem; border-top: 1px solid #1e293b; padding-top: 1rem;">
+                    <p style="color: #67e8f9; font-weight: 600;">2024.XX.XX</p>
+                    <p>今天勇敢拒绝了室友一起上课的邀请，守住了自己的节奏，是很棒的一步。</p>
+                    <p>把个人博客的框架搭建完成了，把自己的想法一点点变成了真实的页面，很有成就感。</p>
+                    <p>今天也有在认真观察生活，认真对待自己的成长。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 社交链接 -->
+        <section>
+            <div class="social-links">
+                <a href="mailto:你的邮箱地址" class="social-item" target="_blank">📮 邮箱</a>
+                <a href="https://github.com/你的GitHub用户名" class="social-item" target="_blank">💻 GitHub</a>
+                <a href="https://xiaohongshu.com/user/profile/你的小红书ID" class="social-item" target="_blank">📕 小红书</a>
+                <!-- 新增社交链接复制上面的a标签即可 -->
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>© 2024 Marlin. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
